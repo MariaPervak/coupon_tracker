@@ -1,0 +1,33 @@
+msgid ""
+msgstr "Project-Id-Version: tygh"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language-Team: Russian\n"
+"Language: ru_RU\n"
+
+msgctxt "Addons::name::coupon_tracker"
+msgid "Coupon tracker"
+msgstr "Coupon tracker"
+
+msgctxt "Addons::description::coupon_tracker"
+msgid "Привлечение покупателей в магазин через партнерскую сеть"
+msgstr "Привлечение покупателей в магазин через партнерскую сеть"
+
+msgctxt "Languages::coupon_tracker.input_value"
+msgid "Заголовок"
+msgstr "Заголовок"
+
+msgctxt "SettingsSections::coupon_tracker::general"
+msgid "General"
+msgstr "Общие"
+
+msgctxt "SettingsOptions::coupon_tracker::order_statuses"
+msgid "Order statuses"
+msgstr "Статус заказа"
+
+msgctxt "SettingsOptions::coupon_tracker::user_groups"
+msgid "user_groups"
+msgstr "Группа пользователей"
+
+
+
+

@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<addon scheme="3.0">
+    <id>coupon_tracker</id>
+    <name>Coupon tracker</name>
+    <description>Привлечение покупателей в магазин через партнерскую сеть</description>
+    <version>1.0</version>
+    <priority>4294967294</priority>
+    <position>0</position>
+    <auto_install>MULTIVENDOR,ULTIMATE</auto_install>
+    <default_language>en</default_language>
+    <status>active</status>
+    <language_variables>
+        <item lang="en" id="coupon_tracker.commission_title">Title</item>
+        <item lang="ru" id="coupon_tracker.commission_title">Заголовок</item>
+
+        <item lang="en" id="coupon_tracker.commission_description">Description</item>
+        <item lang="ru" id="coupon_tracker.commission_description">Описание</item>
+
+        <item lang="en" id="coupon_tracker_item">Coupon code tracking</item>
+        <item lang="ru" id="coupon_tracker_item">Coupon code tracking</item>
+
+        <item lang="en" id="coupon_tracker.partner_name">Partner's name</item>
+        <item lang="ru" id="coupon_tracker.partner_name">Имя партнера</item>
+
+        <item lang="en" id="coupon_tracker.coupon_code">Coupon code</item>
+        <item lang="ru" id="coupon_tracker.coupon_code">Код купона</item>
+
+        <item lang="en" id="coupon_tracker.commission_amount">Commission amount (%)</item>
+        <item lang="ru" id="coupon_tracker.commission_amount">Размер комиссии (%)</item>
+
+        <item lang="en" id="coupon_tracker.order_id">Order ID</item>
+        <item lang="ru" id="coupon_tracker.order_id">ID заказа</item>
+
+        <item lang="en" id="coupon_tracker.order_price">Order price</item>
+        <item lang="ru" id="coupon_tracker.order_price">Сумма заказа</item>
+
+        <item lang="en" id="coupon_tracker.commission_points">Сommission points</item>
+        <item lang="ru" id="coupon_tracker.commission_points">Комиссия (баллы)</item>
+
+        <item lang="en" id="coupon_tracker.commission_credits">Сommission points</item>
+        <item lang="ru" id="coupon_tracker.commission_credits">Комиссия (поинты)</item>
+
+        <item lang="en" id="coupon_tracker.commission_status">Сommission status</item>
+        <item lang="ru" id="coupon_tracker.commission_status">Статус комиссии</item>
+    </language_variables>
+	<queries>
+        <item>ALTER TABLE `?:users` ADD `commission_title` varchar(255) NOT NULL default ''</item>
+        <item for="uninstall">ALTER TABLE  `?:users` DROP `commission_title`</item>
+
+        <item>ALTER TABLE `?:users` ADD `commission_description` text NOT NULL default ''</item>
+        <item for="uninstall">ALTER TABLE  `?:users` DROP `commission_description`</item>
+
+        <item>DROP TABLE IF EXISTS ?:coupon_tracker;</item>
+        <item>
+            CREATE TABLE `?:coupon_tracker` (
+                `partner_name` varchar(250) NOT NULL default '',
+                `coupon_code` varchar(250) NOT NULL default '',
+                `commission` mediumint(8) UNSIGNED NOT NULL,
+                PRIMARY KEY  (`coupon_code`),
+                FOREIGN KEY (`partner_name`) REFERENCES `?:users` (`user_id`)
+            ) Engine=MyISAM DEFAULT CHARSET UTF8;
+        </item>
+
+        <item>DROP TABLE IF EXISTS ?:coupon_tracker_comission;</item>
+        <item>
+            CREATE TABLE `?:coupon_tracker_comission` (
+                `comission_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+                `order_id` mediumint(8) UNSIGNED NOT NULL,
+                `coupon_code` varchar(250) NOT NULL default '',
+                `commission_points` mediumint(8) UNSIGNED NOT NULL DEFAULT '0',
+                `commission_credits` mediumint(8) UNSIGNED NOT NULL DEFAULT '0',
+                `commission_status` varchar(10) NOT NULL default 'O',
+                `user_group` mediumint(8) UNSIGNED NOT NULL,
+                PRIMARY KEY  (`comission_id`),
+                FOREIGN KEY (`order_id`) REFERENCES `?:orders` (`order_id`),
+                FOREIGN KEY (`coupon_code`) REFERENCES `?:coupon_tracker` (`coupon_code`),
+                FOREIGN KEY (`commission_status`) REFERENCES `?:statuses` (`status`)
+            ) Engine=MyISAM DEFAULT CHARSET UTF8;
+        </item>
+
+    </queries>
+    <settings edition_type="ROOT,ULT:VENDOR">
+        <sections>
+            <section id="general">
+                <items>
+                    <item id="order_statuses">
+                        <type>multiple checkboxes</type>
+                        <!-- <variants>
+                            <item id="processed">
+                            </item>
+                            <item id="fulfilled">
+                            </item>
+                            <item id="opened">
+                            </item>
+                            <item id="postponed">
+                            </item>
+                            <item id="call_waiting">
+                            </item>
+                        </variants> -->
+                        <variants/>
+                    </item>
+                    <item id="user_groups">
+                        <type>selectbox</type>
+                        <variants/>
+                    </item>
+                </items>
+            </section>
+        </sections>
+    </settings>
+    <functions>
+        <item for="install">fn_coupon_tracker_install</item>
+    </functions>
+</addon>
+
